@@ -1,0 +1,13 @@
+[[source]]
+verify_ssl = true
+url = "https://pypi.python.org/simple"
+name = "pypi"
+
+[requires]
+python_version = "3.6"
+
+[dev-packages]
+
+[packages]
+click = "*"
+sqlite3 = "*"

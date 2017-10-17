@@ -27,9 +27,5 @@ def delete_user_from_db(dbname, username):
     db.delete_user(dbname, username)
 
 
-def main():
-    cli()
-
-
 if __name__ == '__main__':
-    main()
+    cli()

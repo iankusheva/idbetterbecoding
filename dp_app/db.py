@@ -1,7 +1,5 @@
-import click
 import os
 import sqlite3
-import sys
 
 
 def get_full_path_to_db(dbname):
@@ -45,7 +43,7 @@ def create_table(dbname):
     conn = sqlite3.connect(path_to_db)
     cursor = conn.cursor()
     cursor.execute('CREATE TABLE table1 ('
-                   'userid integer PRIMARY KEY, username text)')
+                   'userid integer PRIMARY KEY, username text UNIQUE)')
     return dbname
 
 
@@ -54,8 +52,5 @@ def upload_json_into_db(parsed_string):
     cursor = conn.cursor()
     for elem in parsed_string['books']:
         bookname = elem['bookname']
-        author = (elem['authorname'],)
-        if cursor.execute('SELECT authorname FROM table_authors WHERE authorname=?', author).fetchall():
-            print('Author already in db, continuing...')
-        else:
-            cursor.execute("INSERT INTO table_authors VALUES (NULL, ?)", author)
+        author = elem['authorname']
+        cursor.execute("INSERT OR IGNORE INTO table_authors VALUES (NULL, ?)", (author,))

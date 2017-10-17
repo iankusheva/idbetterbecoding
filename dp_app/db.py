@@ -1,7 +1,5 @@
-import click
 import os
 import sqlite3
-import sys
 
 
 def get_full_path_to_db(dbname):
@@ -9,9 +7,6 @@ def get_full_path_to_db(dbname):
     return os.path.join(running_dir, '{}.db'.format(dbname))
 
 
-@click.command()
-@click.option('--dbname', prompt='Enter database name')
-@click.option('--username', prompt='Enter a username to be added')
 def add_user(dbname, username):
     path_to_db = get_full_path_to_db(dbname)
     if not os.path.exists(path_to_db):
@@ -25,9 +20,6 @@ def add_user(dbname, username):
     # print(cursor.execute('SELECT * FROM table1').fetchall())
 
 
-@click.command()
-@click.option('--dbname', prompt='Enter database name')
-@click.option('--username', prompt='Enter a username to be deleted')
 def delete_user(dbname, username):
     path_to_db = get_full_path_to_db(dbname)
     if not os.path.exists(path_to_db):
@@ -43,8 +35,6 @@ def delete_user(dbname, username):
         print('No username {} in database {}, nothing to delete'.format(username, dbname))
 
 
-@click.command()
-@click.option('--dbname', prompt='Enter database name')
 def create_table(dbname):
     path_to_db = get_full_path_to_db(dbname)
     if os.path.exists(path_to_db):
@@ -53,27 +43,14 @@ def create_table(dbname):
     conn = sqlite3.connect(path_to_db)
     cursor = conn.cursor()
     cursor.execute('CREATE TABLE table1 ('
-                   'userid integer PRIMARY KEY, username text)')
+                   'userid integer PRIMARY KEY, username text UNIQUE)')
     return dbname
 
 
-@click.command()
-@click.option('--action', prompt='Choose an action to perform (CUD, or Q for quit)', type=click.Choice(['C', 'U', 'D', 'Q']))
-def do_stuff(action):
-    if action == 'C':
-        create_table(standalone_mode=False)
-    elif action == 'U':
-        add_user(standalone_mode=False)
-    elif action == 'D':
-        delete_user(standalone_mode=False)
-    elif action == 'Q':
-        sys.exit(0)
-
-
-def main():
-    while True:
-        do_stuff(standalone_mode=False)
-
-
-if __name__ == '__main__':
-    main()
+def upload_json_into_db(parsed_string):
+    conn = sqlite3.connect('smart.db')
+    cursor = conn.cursor()
+    for elem in parsed_string['books']:
+        bookname = elem['bookname']
+        author = elem['authorname']
+        cursor.execute("INSERT OR IGNORE INTO table_authors VALUES (NULL, ?)", (author,))

@@ -39,12 +39,10 @@ def get_full_path_to_db(dbname):
     return os.path.join(running_dir, '{}'.format(dbname))
 
 
-def print_all_tables(path_to_db):
-    conn = sqlite3.connect(path_to_db)
+def print_all_tables(path_to_db, conn):
     cursor = conn.cursor()
     for table in ('table_users', 'table_books', 'table_authors', 'table_userbooks'):
         print(table, '-' , cursor.execute('SELECT * FROM {}'.format(table)).fetchall(), '\n')
-    conn.close()
 
 
 def add_user(dbname, username):
@@ -107,7 +105,7 @@ def upload_book_into_db(bookname, author, path_to_db, conn, cursor):
     cursor.execute("INSERT OR IGNORE INTO table_books VALUES (NULL, ?, ?)", (bookname, author_id))
 
     conn.commit()
-    # print_all_tables(path_to_db)
+    # print_all_tables(path_to_db, conn)
 
 
 def upload_user_into_db(user, path_to_db, conn, cursor):
@@ -128,4 +126,4 @@ def upload_user_into_db(user, path_to_db, conn, cursor):
             cursor.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
 
     conn.commit()
-    # print_all_tables(path_to_db)
+    # print_all_tables(path_to_db, conn)

@@ -7,14 +7,12 @@ def get_full_path_to_db(dbname):
     return os.path.join(running_dir, '{}'.format(dbname))
 
 
-def print_all_tables(dbname):
-    path_to_db = get_full_path_to_db(dbname)
+def print_all_tables(path_to_db):
     conn = sqlite3.connect(path_to_db)
     cursor = conn.cursor()
-    print(cursor.execute('SELECT * FROM table_users').fetchall())
-    print(cursor.execute('SELECT * FROM table_books').fetchall())
-    print(cursor.execute('SELECT * FROM table_authors').fetchall())
-    print(cursor.execute('SELECT * FROM table_userbooks').fetchall())
+    for table in ('table_users', 'table_books', 'table_authors', 'table_userbooks'):
+        print(table, '-' , cursor.execute('SELECT * FROM {}'.format(table)).fetchall(), '\n')
+    conn.close()
 
 
 def add_user(dbname, username):
@@ -66,22 +64,51 @@ def create_tables_in_db(path_to_db):
     cursor.execute('CREATE TABLE table_userbooks (userid integer NOT NULL, bookid integer NOT NULL, FOREIGN KEY (userid) REFERENCES table_users(userid), FOREIGN KEY (bookid) REFERENCES table_books(bookid))')
 
 
-def upload_json_into_db(parsed_string, dbname):
-    path_to_db = get_full_path_to_db(dbname)
+def upload_book_into_db(bookname, author, path_to_db, conn=None, cursor=None):
+    if not os.path.exists(path_to_db):
+        create_tables_in_db(path_to_db)
+
+    if not conn:
+        conn = sqlite3.connect(path_to_db)
+        cursor = conn.cursor()
+    # skip the rest if the book already exists
+    if cursor.execute("SELECT bookname from table_books WHERE bookname=?", (bookname, )).fetchall():
+        return
+
+    # add author, keep id
+    cursor.execute("INSERT OR IGNORE INTO table_authors VALUES (NULL, ?)", (author,))
+    author_id = cursor.execute("SELECT authorid from table_authors WHERE authorname=?", (author, )).fetchone()[0]
+
+    # add book with a link to its author
+    cursor.execute("INSERT OR IGNORE INTO table_books VALUES (NULL, ?, ?)", (bookname, author_id))
+
+    conn.commit()
+
+
+def upload_user_into_db(user, path_to_db):
     if not os.path.exists(path_to_db):
         create_tables_in_db(path_to_db)
 
     conn = sqlite3.connect(path_to_db)
     cursor = conn.cursor()
-    bookname = parsed_string['book']
-    author = parsed_string['author']
-    # print_all_tables()
-    if cursor.execute("SELECT bookname from table_books WHERE bookname=?", (bookname, )).fetchall():
-        return
-    cursor.execute("INSERT OR IGNORE INTO table_authors VALUES (NULL, ?)", (author,))
-    author_id = cursor.execute("SELECT authorid from table_authors WHERE authorname=?", (author, )).fetchone()[0]
-    cursor.execute("INSERT INTO table_books VALUES (NULL, ?, ?)", (bookname, author_id))
+    username = list(user.keys())[0]
 
-    conn.commit()
-    print_all_tables(dbname)
-    print(author_id)
+    cursor.execute("INSERT OR IGNORE INTO table_users VALUES (NULL, ?)", (username,))
+    user_id = cursor.execute("SELECT userid from table_users WHERE username=?", (username,)).fetchone()[0]
+
+    for book in user[username]['favourites']:
+        bookname = book['book']
+        author = book['author']
+
+        if not cursor.execute("SELECT bookname from table_books WHERE bookname=?", (bookname,)).fetchall():
+            upload_book_into_db(bookname, author, path_to_db, conn, cursor)
+        book_id = cursor.execute("SELECT bookid from table_books WHERE bookname=?", (bookname,)).fetchone()[0]
+
+        if not cursor.execute("SELECT * from table_userbooks WHERE userid=? AND bookid=?", (user_id, book_id)).fetchall():
+            cursor.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
+
+        conn.commit()
+
+    print_all_tables(path_to_db)
+
+

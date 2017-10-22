@@ -3,7 +3,7 @@ import json
 from dp_app import db
 
 
-json_string = """
+json_string_global = """
 {
 	"users": [{
 		"vasya": {
@@ -128,9 +128,25 @@ def delete_user_from_db(dbname, username):
 @cli.command('add_book')
 @click.argument('json_string')
 @click.option('--dbname', default='favourite_books.db')
-def delete_user_from_db(json_string, dbname):
+def upload_books_into_db(json_string, dbname):
     parsed_json = json.loads(json_string)
-    db.upload_json_into_db(parsed_json, dbname)
+    path_to_db = db.get_full_path_to_db(dbname)
+    for book in parsed_json['books']:
+        bookname = book['book']
+        author = book['author']
+        db.upload_book_into_db(bookname, author, path_to_db)
+
+
+@cli.command('add_user_with_books')
+@click.argument('json_string')
+@click.option('--dbname', default='favourite_books.db')
+def upload_user_with_books_into_db(json_string, dbname):
+    parsed_json = json.loads(json_string_global)
+    path_to_db = db.get_full_path_to_db(dbname)
+
+    list_of_users = parsed_json['users']
+    for user in list_of_users:
+        db.upload_user_into_db(user, path_to_db)
 
 
 if __name__ == '__main__':

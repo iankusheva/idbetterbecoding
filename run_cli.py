@@ -66,20 +66,6 @@ json_string_global = """
 			}]
 		}
 	}, {
-		"user1": {
-			"favourites": [{
-				"book": "name",
-				"author": "name"
-			}]
-		}
-	}, {
-		"user1": {
-			"favourites": [{
-				"book": "name",
-				"author": "name"
-			}]
-		}
-	}, {
 		"gregory": {
 			"favourites": [{
 				"book": "The Lord of the Rings",
@@ -93,7 +79,7 @@ json_string_global = """
 			}]
 		}
 	}, {
-		"user1": {
+		"solnyshko35": {
 			"favourites": []
 		}
 	}]
@@ -141,7 +127,7 @@ def upload_books_into_db(json_string, dbname):
 @click.argument('json_string')
 @click.option('--dbname', default='favourite_books.db')
 def upload_user_with_books_into_db(json_string, dbname):
-    parsed_json = json.loads(json_string_global)
+    parsed_json = json.loads(json_string)
     path_to_db = db.get_full_path_to_db(dbname)
 
     list_of_users = parsed_json['users']

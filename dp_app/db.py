@@ -107,8 +107,5 @@ def upload_user_into_db(user, path_to_db):
         if not cursor.execute("SELECT * from table_userbooks WHERE userid=? AND bookid=?", (user_id, book_id)).fetchall():
             cursor.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
 
-        conn.commit()
-
-    print_all_tables(path_to_db)
-
-
+    conn.commit()
+    # print_all_tables(path_to_db)

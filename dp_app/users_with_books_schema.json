@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+        "users": {
+            "type": "array",
+            "items": {
+                "title": "user",
+                "type": "object",
+                "properties": {
+                    "favourites": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "book": {
+                                    "type": "string"
+                                },
+                                "author": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["book", "author"]
+                        }
+                     }
+                 }
+            }
+        }
+    }
+}

@@ -1,6 +1,17 @@
 import click
 import json
+import jsonschema
 from dp_app import db
+
+
+def validate_json(json_string, json_schema):
+    schema = open(db.get_full_path_to_file(json_schema)).read()
+    try:
+        jsonschema.validate(json.loads(json_string), json.loads(schema))
+    except jsonschema.ValidationError as e:
+        print(e.message)
+    except jsonschema.SchemaError as e:
+        print(e)
 
 
 @click.group()
@@ -8,31 +19,12 @@ def cli():
     pass
 
 
-@cli.command('create')
-@click.argument('dbname')
-def create_db(dbname):
-    db.create_table(dbname)
-
-
-@cli.command('add')
-@click.argument('dbname')
-@click.argument('username')
-def add_user_to_db(dbname, username):
-    db.add_user(dbname, username)
-
-
-@cli.command('delete')
-@click.argument('dbname')
-@click.argument('username')
-def delete_user_from_db(dbname, username):
-    db.delete_user(dbname, username)
-
-
 @cli.command('add_book')
 @click.option('--json_file', default='json_string_books_only.txt')
 @click.option('--dbname', default='favourite_books.db')
 def upload_books_into_db(json_file, dbname):
     json_string = open(db.get_full_path_to_file(json_file)).read()
+    validate_json(json_string, 'books_only_schema.json')
     parsed_json = json.loads(json_string)
     path_to_db = db.get_full_path_to_file(dbname)
 
@@ -49,6 +41,7 @@ def upload_books_into_db(json_file, dbname):
 @click.option('--dbname', default='favourite_books.db')
 def upload_user_with_books_into_db(json_file, dbname):
     json_string = open(db.get_full_path_to_file(json_file)).read()
+    validate_json(json_string, 'users_with_books_schema.json')
     parsed_json = json.loads(json_string)
     path_to_db = db.get_full_path_to_file(dbname)
     list_of_users = parsed_json['users']

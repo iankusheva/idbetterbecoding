@@ -1,0 +1,79 @@
+{"users": [{
+		"vasya": {
+			"favourites": [{
+				"book": "Harry Potter and the Prisoner of Azkaban",
+				"author": "J. K. Rowling"
+			},
+			{
+				"book": "Harry Potter and the Deathly Hallows",
+				"author": "J. K. Rowling"
+			},
+			{
+				"book": "Harry Potter and the Half-Blood Prince",
+				"author": "J. K. Rowling"
+			}]
+		}
+	}, {
+		"petya": {
+			"favourites": [{
+				"book": "The Lord of the Rings",
+				"author": "J. R. R. Tolkien"
+			},{
+				"book": "Three Men in a Boat",
+				"author": "Jerome K. Jerome"
+			},{
+				"book": "Ham on Rye",
+				"author": "Charles Bukowski"
+			}]
+		}
+	}, {
+		"vasilisa": {
+			"favourites": [{
+				"book": "Harry Potter and the Prisoner of Azkaban",
+				"author": "J. K. Rowling"
+			},{
+				"book": "The Martian Chronicles",
+				"author": "Ray Bradbury"
+			},{
+				"book": "A Scandal in Bohemia",
+				"author": "Arthur Conan Doyle"
+			}]
+		}
+	}, {
+		"sashka": {
+			"favourites": [{
+				"book": "A Scandal in Bohemia",
+				"author": "Arthur Conan Doyle"
+			},{
+				"book": "The Adventure of the Yellow Face",
+				"author": "Arthur Conan Doyle"
+			},{
+				"book": "The Adventure of the Final Problem",
+				"author": "Arthur Conan Doyle"
+			},{
+				"book": "The Poison Belt",
+				"author": "Arthur Conan Doyle"
+			},{
+				"book": "Ham on Rye",
+				"author": "Charles Bukowski"
+			}]
+		}
+	}, {
+		"gregory": {
+			"favourites": [{
+				"book": "The Lord of the Rings",
+				"author": "J. R. R. Tolkien"
+			},{
+				"book": "Harry Potter and the Prisoner of Azkaban",
+				"author": "J. K. Rowling"
+			},{
+				"book": "Ham on Rye",
+				"author": "Charles Bukowski"
+			}]
+		}
+	}, {
+		"solnyshko35": {
+			"favourites": [{"error": "35", "author": "44"}]
+		}
+	}]
+}

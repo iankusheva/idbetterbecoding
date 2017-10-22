@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Books set",
+    "type": "object",
+    "properties": {
+        "books": {
+            "type": "array",
+            "items": {
+                "title": "Book",
+                "type": "object",
+                "properties": {
+                    "book": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    }
+                },
+                "required": ["book", "author"]
+            }
+        }
+    }
+}

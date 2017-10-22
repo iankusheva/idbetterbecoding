@@ -58,20 +58,20 @@ def upload_book_into_db(bookname, author, path_to_db, conn, cursor):
         return
 
     # add author, keep id
-    cursor.execute("INSERT OR IGNORE INTO table_authors VALUES (NULL, ?)", (author,))
+    cursor.execute("INSERT OR IGNORE INTO table_authors (authorname) VALUES (?)", (author,))
     author_id = cursor.execute("SELECT authorid from table_authors WHERE authorname=?", (author, )).fetchone()[0]
 
     # add book with a link to its author
-    cursor.execute("INSERT OR IGNORE INTO table_books VALUES (NULL, ?, ?)", (bookname, author_id))
+    cursor.execute("INSERT OR IGNORE INTO table_books (bookname, authorid) VALUES (?, ?)", (bookname, author_id))
 
     conn.commit()
-    # print_all_tables(path_to_db, conn)
+    print_all_tables(path_to_db, conn)
 
 
 def upload_user_into_db(user, path_to_db, conn, cursor):
     username = list(user.keys())[0]
 
-    cursor.execute("INSERT OR IGNORE INTO table_users VALUES (NULL, ?)", (username,))
+    cursor.execute("INSERT OR IGNORE INTO table_users (username) VALUES (?)", (username,))
     user_id = cursor.execute("SELECT userid from table_users WHERE username=?", (username,)).fetchone()[0]
 
     for book in user[username]['favourites']:
@@ -86,4 +86,4 @@ def upload_user_into_db(user, path_to_db, conn, cursor):
             cursor.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
 
     conn.commit()
-    # print_all_tables(path_to_db, conn)
+    print_all_tables(path_to_db, conn)

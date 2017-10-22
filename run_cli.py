@@ -117,10 +117,13 @@ def delete_user_from_db(dbname, username):
 def upload_books_into_db(json_string, dbname):
     parsed_json = json.loads(json_string)
     path_to_db = db.get_full_path_to_db(dbname)
-    for book in parsed_json['books']:
-        bookname = book['book']
-        author = book['author']
-        db.upload_book_into_db(bookname, author, path_to_db)
+
+    with db.DatabaseConnection(path_to_db=path_to_db) as conn:
+        cursor = conn.cursor()
+        for book in parsed_json['books']:
+            bookname = book['book']
+            author = book['author']
+            db.upload_book_into_db(bookname, author, path_to_db, conn, cursor)
 
 
 @cli.command('add_user_with_books')
@@ -129,10 +132,12 @@ def upload_books_into_db(json_string, dbname):
 def upload_user_with_books_into_db(json_string, dbname):
     parsed_json = json.loads(json_string)
     path_to_db = db.get_full_path_to_db(dbname)
-
     list_of_users = parsed_json['users']
-    for user in list_of_users:
-        db.upload_user_into_db(user, path_to_db)
+
+    with db.DatabaseConnection(path_to_db=path_to_db) as conn:
+        cursor = conn.cursor()
+        for user in list_of_users:
+            db.upload_user_into_db(user, path_to_db, conn, cursor)
 
 
 if __name__ == '__main__':

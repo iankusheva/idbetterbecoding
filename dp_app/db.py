@@ -1,6 +1,38 @@
 import os
 import sqlite3
 
+from contextlib import contextmanager
+
+
+# class realization of db connection cntx mngr
+class DatabaseConnection():
+
+    def __init__(self, path_to_db):
+        self.path_to_db = path_to_db
+
+    def __enter__(self):
+        if not os.path.exists(self.path_to_db):
+            self.conn = sqlite3.connect(self.path_to_db)
+            create_tables_in_db(self.conn)
+        else:
+            self.conn = sqlite3.connect(self.path_to_db)
+        return self.conn
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.conn.close()
+
+
+# method with decorator realization
+@contextmanager
+def connect_to_db(path_to_db):
+    if not os.path.exists(path_to_db):
+        conn = sqlite3.connect(path_to_db)
+        create_tables_in_db(conn)
+    else:
+        conn = sqlite3.connect(path_to_db)
+    yield conn
+    conn.close()
+
 
 def get_full_path_to_db(dbname):
     running_dir = os.path.dirname(os.path.abspath(__file__))
@@ -55,22 +87,14 @@ def create_table(dbname):
     return dbname
 
 
-def create_tables_in_db(path_to_db):
-    conn = sqlite3.connect(path_to_db)
+def create_tables_in_db(conn):
     cursor = conn.cursor()
-    cursor.execute('CREATE TABLE table_users (userid integer PRIMARY KEY AUTOINCREMENT NOT NULL, username text NOT NULL UNIQUE)')
-    cursor.execute('CREATE TABLE table_authors (authorid integer PRIMARY KEY AUTOINCREMENT NOT NULL, authorname text NOT NULL UNIQUE)')
-    cursor.execute('CREATE TABLE table_books (bookid integer PRIMARY KEY AUTOINCREMENT NOT NULL, bookname text NOT NULL UNIQUE, authorid integer NOT NULL, FOREIGN KEY (authorid) REFERENCES table_authors(authorid))')
-    cursor.execute('CREATE TABLE table_userbooks (userid integer NOT NULL, bookid integer NOT NULL, FOREIGN KEY (userid) REFERENCES table_users(userid), FOREIGN KEY (bookid) REFERENCES table_books(bookid))')
+    with open('/home/irina/Documents/pythonic_stuff/idbetterbecoding/dp_app/create_empty_tables_query.txt') as file_:
+        for command in file_.readlines():
+            cursor.execute(command)
 
 
-def upload_book_into_db(bookname, author, path_to_db, conn=None, cursor=None):
-    if not os.path.exists(path_to_db):
-        create_tables_in_db(path_to_db)
-
-    if not conn:
-        conn = sqlite3.connect(path_to_db)
-        cursor = conn.cursor()
+def upload_book_into_db(bookname, author, path_to_db, conn, cursor):
     # skip the rest if the book already exists
     if cursor.execute("SELECT bookname from table_books WHERE bookname=?", (bookname, )).fetchall():
         return
@@ -83,14 +107,10 @@ def upload_book_into_db(bookname, author, path_to_db, conn=None, cursor=None):
     cursor.execute("INSERT OR IGNORE INTO table_books VALUES (NULL, ?, ?)", (bookname, author_id))
 
     conn.commit()
+    # print_all_tables(path_to_db)
 
 
-def upload_user_into_db(user, path_to_db):
-    if not os.path.exists(path_to_db):
-        create_tables_in_db(path_to_db)
-
-    conn = sqlite3.connect(path_to_db)
-    cursor = conn.cursor()
+def upload_user_into_db(user, path_to_db, conn, cursor):
     username = list(user.keys())[0]
 
     cursor.execute("INSERT OR IGNORE INTO table_users VALUES (NULL, ?)", (username,))

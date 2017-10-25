@@ -5,12 +5,10 @@ from dp_app import db
 
 
 def validate_json(json_file, json_schema):
-    with open(db.get_full_path_to_file(json_file)) as a, open(db.get_full_path_to_file(json_schema)) as b:
-        string_to_parse = a.read()
-        schema = b.read()
+    with open(db.get_full_path_to_file(json_file)) as file_with_string, open(db.get_full_path_to_file(json_schema)) as file_with_schema:
         try:
-            json_loaded = json.loads(string_to_parse)
-            jsonschema.validate(json_loaded, json.loads(schema))
+            json_loaded = json.loads(file_with_string.read())
+            jsonschema.validate(json_loaded, json.loads(file_with_schema.read()))
             return json_loaded
         except jsonschema.ValidationError as e:
             print(e.message)

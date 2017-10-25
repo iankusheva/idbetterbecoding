@@ -32,8 +32,7 @@ def print_all_tables(path_to_db, conn):
 
 def create_tables_in_db(conn):
     with open('/home/irina/Documents/pythonic_stuff/idbetterbecoding/dp_app/create_empty_tables_query.txt') as file_:
-        for command in file_.readlines():
-            conn.execute(command)
+        conn.executescript(file_.read())
 
 
 def upload_book_into_db(bookname, author, path_to_db, conn):

@@ -49,7 +49,6 @@ def upload_book_into_db(bookname, author, path_to_db, conn):
     conn.execute("INSERT OR IGNORE INTO table_books (bookname, authorid) VALUES (?, ?)", (bookname, author_id))
 
     conn.commit()
-    # print_all_tables(path_to_db, conn)
 
 
 def upload_user_into_db(user, path_to_db, conn):
@@ -70,4 +69,3 @@ def upload_user_into_db(user, path_to_db, conn):
             conn.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
 
     conn.commit()
-    # print_all_tables(path_to_db, conn)

@@ -73,7 +73,7 @@
 		}
 	}, {
 		"solnyshko35": {
-			"favourites": [{"error": "35", "author": "44"}]
+			"favourites": []
 		}
 	}]
 }

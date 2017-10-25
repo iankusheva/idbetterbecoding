@@ -1,8 +1,0 @@
-CREATE TABLE table_users (userid integer PRIMARY KEY AUTO_INCREMENT NOT NULL, username text NOT NULL UNIQUE)
-
-CREATE TABLE table_authors (authorid integer PRIMARY KEY AUTO_INCREMENT NOT NULL, authorname text NOT NULL UNIQUE)
-
-CREATE TABLE table_books (bookid integer PRIMARY KEY AUTO_INCREMENT NOT NULL, bookname text NOT NULL UNIQUE, authorid integer NOT NULL, FOREIGN KEY (authorid) REFERENCES table_authors(authorid))
-
-CREATE TABLE table_userbooks (userid integer NOT NULL, bookid integer NOT NULL, FOREIGN KEY (userid) REFERENCES table_users(userid), FOREIGN KEY (bookid) REFERENCES table_books(bookid))
-

@@ -49,16 +49,16 @@ def upload_book_into_db(bookname, author, path_to_db, conn):
     conn.execute("INSERT OR IGNORE INTO table_books (bookname, authorid) VALUES (?, ?)", (bookname, author_id))
 
     conn.commit()
-    print_all_tables(path_to_db, conn)
+    # print_all_tables(path_to_db, conn)
 
 
 def upload_user_into_db(user, path_to_db, conn):
-    username = list(user.keys())[0]
+    username = user["username"]
 
     conn.execute("INSERT OR IGNORE INTO table_users (username) VALUES (?)", (username,))
     user_id = conn.execute("SELECT userid from table_users WHERE username=?", (username,)).fetchone()[0]
 
-    for book in user[username]['favourites']:
+    for book in user['favourites']:
         bookname = book['book']
         author = book['author']
 
@@ -70,4 +70,4 @@ def upload_user_into_db(user, path_to_db, conn):
             conn.execute("INSERT OR IGNORE INTO table_userbooks VALUES (?, ?)", (user_id, book_id))
 
     conn.commit()
-    print_all_tables(path_to_db, conn)
+    # print_all_tables(path_to_db, conn)

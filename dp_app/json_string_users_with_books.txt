@@ -1,6 +1,6 @@
-{"users": [{
-		"vasya": {
-			"favourites": [{
+{"users": [
+    {"username": "vasya",
+	    "favourites": [{
 				"book": "Harry Potter and the Prisoner of Azkaban",
 				"author": "J. K. Rowling"
 			},
@@ -12,10 +12,9 @@
 				"book": "Harry Potter and the Half-Blood Prince",
 				"author": "J. K. Rowling"
 			}]
-		}
-	}, {
-		"petya": {
-			"favourites": [{
+		},
+	{"username": "petya",
+	    "favourites": [{
 				"book": "The Lord of the Rings",
 				"author": "J. R. R. Tolkien"
 			},{
@@ -25,10 +24,9 @@
 				"book": "Ham on Rye",
 				"author": "Charles Bukowski"
 			}]
-		}
-	}, {
-		"vasilisa": {
-			"favourites": [{
+		},
+	{"username": "vasilisa",
+	    "favourites": [{
 				"book": "Harry Potter and the Prisoner of Azkaban",
 				"author": "J. K. Rowling"
 			},{
@@ -38,10 +36,9 @@
 				"book": "A Scandal in Bohemia",
 				"author": "Arthur Conan Doyle"
 			}]
-		}
-	}, {
-		"sashka": {
-			"favourites": [{
+		},
+	{"username": "sashka",
+	    "favourites": [{
 				"book": "A Scandal in Bohemia",
 				"author": "Arthur Conan Doyle"
 			},{
@@ -57,10 +54,9 @@
 				"book": "Ham on Rye",
 				"author": "Charles Bukowski"
 			}]
-		}
-	}, {
-		"gregory": {
-			"favourites": [{
+		},
+	{"username": "gregory",
+	    "favourites": [{
 				"book": "The Lord of the Rings",
 				"author": "J. R. R. Tolkien"
 			},{
@@ -70,10 +66,9 @@
 				"book": "Ham on Rye",
 				"author": "Charles Bukowski"
 			}]
+		},
+	{"username": "solnyshko35",
+	    "favourites": []
 		}
-	}, {
-		"solnyshko35": {
-			"favourites": []
-		}
-	}]
+	]
 }

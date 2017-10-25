@@ -1,29 +1,34 @@
 {
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Users set",
     "type": "object",
     "properties": {
         "users": {
             "type": "array",
             "items": {
-                "title": "user",
                 "type": "object",
-                "properties": {
-                    "favourites": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "book": {
-                                    "type": "string"
+                "properties":
+                    {
+                        "username": {"type": "string"},
+                        "favourites": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "book": {
+                                        "type": "string"
+                                    },
+                                    "author": {
+                                        "type": "string"
+                                    }
                                 },
-                                "author": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["book", "author"]
+                                "required": ["book", "author"]
                         }
                      }
-                 }
+                 },
+                "required": ["username", "favourites"]
             }
         }
-    }
+    },
+    "required": ["users"]
 }

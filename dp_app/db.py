@@ -37,8 +37,8 @@ def create_tables_in_db(conn):
 
 def upload_book_into_db(bookname, author, path_to_db, conn):
     # skip the rest if the book already exists
-    if conn.execute("SELECT bookname from table_books WHERE bookname=?", (bookname, )).fetchall():
-        return
+    # if conn.execute("SELECT bookname from table_books WHERE bookname=?", (bookname, )).fetchall():
+    #     return
 
     # add author, keep id
     conn.execute("INSERT OR IGNORE INTO table_authors (authorname) VALUES (?)", (author,))
